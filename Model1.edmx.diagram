@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="b3f6410644a44834a419dcbb590bc546" Name="Diagram1">
+        <EntityTypeShape EntityType="db_siskom_smeasModel.class" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_siskom_smeasModel.student" Width="1.5" PointX="3" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_siskom_smeasModel.user" Width="1.5" PointX="3" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_siskom_smeasModel.violation_categories" Width="1.5" PointX="3" PointY="8.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_siskom_smeasModel.violation_records" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
+        <AssociationConnector Association="db_siskom_smeasModel.FK_students_classes" ManuallyRouted="false" />
+        <AssociationConnector Association="db_siskom_smeasModel.FK_records_students" ManuallyRouted="false" />
+        <AssociationConnector Association="db_siskom_smeasModel.FK_records_users" ManuallyRouted="false" />
+        <AssociationConnector Association="db_siskom_smeasModel.FK_records_categories" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,344 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="db_siskom_smeasModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="classes">
+          <Key>
+            <PropertyRef Name="id_class" />
+          </Key>
+          <Property Name="id_class" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="class_name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="academic_year" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="students">
+          <Key>
+            <PropertyRef Name="id_student" />
+          </Key>
+          <Property Name="id_student" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nisn" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="full_name" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="id_class" Type="int" Nullable="false" />
+          <Property Name="gender" Type="varchar" MaxLength="15" Nullable="false" />
+        </EntityType>
+        <EntityType Name="users">
+          <Key>
+            <PropertyRef Name="id_user" />
+          </Key>
+          <Property Name="id_user" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="username" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="password" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="full_name" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="role" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="violation_categories">
+          <Key>
+            <PropertyRef Name="id_category" />
+          </Key>
+          <Property Name="id_category" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="category_name" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="severity_level" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="default_point" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="violation_records">
+          <Key>
+            <PropertyRef Name="id_record" />
+          </Key>
+          <Property Name="id_record" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_student" Type="int" Nullable="false" />
+          <Property Name="id_category" Type="int" Nullable="false" />
+          <Property Name="id_reporter_user" Type="int" Nullable="false" />
+          <Property Name="violation_date" Type="date" Nullable="false" />
+          <Property Name="description" Type="varchar(max)" />
+          <Property Name="counseling_status" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_records_categories">
+          <End Role="violation_categories" Type="Self.violation_categories" Multiplicity="1" />
+          <End Role="violation_records" Type="Self.violation_records" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="violation_categories">
+              <PropertyRef Name="id_category" />
+            </Principal>
+            <Dependent Role="violation_records">
+              <PropertyRef Name="id_category" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_records_students">
+          <End Role="students" Type="Self.students" Multiplicity="1" />
+          <End Role="violation_records" Type="Self.violation_records" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="students">
+              <PropertyRef Name="id_student" />
+            </Principal>
+            <Dependent Role="violation_records">
+              <PropertyRef Name="id_student" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_records_users">
+          <End Role="users" Type="Self.users" Multiplicity="1" />
+          <End Role="violation_records" Type="Self.violation_records" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id_user" />
+            </Principal>
+            <Dependent Role="violation_records">
+              <PropertyRef Name="id_reporter_user" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_students_classes">
+          <End Role="classes" Type="Self.classes" Multiplicity="1" />
+          <End Role="students" Type="Self.students" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="classes">
+              <PropertyRef Name="id_class" />
+            </Principal>
+            <Dependent Role="students">
+              <PropertyRef Name="id_class" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="db_siskom_smeasModelStoreContainer">
+          <EntitySet Name="classes" EntityType="Self.classes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="students" EntityType="Self.students" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="violation_categories" EntityType="Self.violation_categories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="violation_records" EntityType="Self.violation_records" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_records_categories" Association="Self.FK_records_categories">
+            <End Role="violation_categories" EntitySet="violation_categories" />
+            <End Role="violation_records" EntitySet="violation_records" />
+          </AssociationSet>
+          <AssociationSet Name="FK_records_students" Association="Self.FK_records_students">
+            <End Role="students" EntitySet="students" />
+            <End Role="violation_records" EntitySet="violation_records" />
+          </AssociationSet>
+          <AssociationSet Name="FK_records_users" Association="Self.FK_records_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="violation_records" EntitySet="violation_records" />
+          </AssociationSet>
+          <AssociationSet Name="FK_students_classes" Association="Self.FK_students_classes">
+            <End Role="classes" EntitySet="classes" />
+            <End Role="students" EntitySet="students" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="db_siskom_smeasModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="class">
+          <Key>
+            <PropertyRef Name="id_class" />
+          </Key>
+          <Property Name="id_class" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="class_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="academic_year" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="students" Relationship="Self.FK_students_classes" FromRole="classes" ToRole="students" />
+        </EntityType>
+        <EntityType Name="student">
+          <Key>
+            <PropertyRef Name="id_student" />
+          </Key>
+          <Property Name="id_student" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nisn" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="full_name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="id_class" Type="Int32" Nullable="false" />
+          <Property Name="gender" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="class" Relationship="Self.FK_students_classes" FromRole="students" ToRole="classes" />
+          <NavigationProperty Name="violation_records" Relationship="Self.FK_records_students" FromRole="students" ToRole="violation_records" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="id_user" />
+          </Key>
+          <Property Name="id_user" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="full_name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="role" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="violation_records" Relationship="Self.FK_records_users" FromRole="users" ToRole="violation_records" />
+        </EntityType>
+        <EntityType Name="violation_categories">
+          <Key>
+            <PropertyRef Name="id_category" />
+          </Key>
+          <Property Name="id_category" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="category_name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="severity_level" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="default_point" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="violation_records" Relationship="Self.FK_records_categories" FromRole="violation_categories" ToRole="violation_records" />
+        </EntityType>
+        <EntityType Name="violation_records">
+          <Key>
+            <PropertyRef Name="id_record" />
+          </Key>
+          <Property Name="id_record" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_student" Type="Int32" Nullable="false" />
+          <Property Name="id_category" Type="Int32" Nullable="false" />
+          <Property Name="id_reporter_user" Type="Int32" Nullable="false" />
+          <Property Name="violation_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="counseling_status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="student" Relationship="Self.FK_records_students" FromRole="violation_records" ToRole="students" />
+          <NavigationProperty Name="user" Relationship="Self.FK_records_users" FromRole="violation_records" ToRole="users" />
+          <NavigationProperty Name="violation_categories" Relationship="Self.FK_records_categories" FromRole="violation_records" ToRole="violation_categories" />
+        </EntityType>
+        <Association Name="FK_students_classes">
+          <End Role="classes" Type="Self.class" Multiplicity="1" />
+          <End Role="students" Type="Self.student" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="classes">
+              <PropertyRef Name="id_class" />
+            </Principal>
+            <Dependent Role="students">
+              <PropertyRef Name="id_class" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_records_students">
+          <End Role="students" Type="Self.student" Multiplicity="1" />
+          <End Role="violation_records" Type="Self.violation_records" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="students">
+              <PropertyRef Name="id_student" />
+            </Principal>
+            <Dependent Role="violation_records">
+              <PropertyRef Name="id_student" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_records_users">
+          <End Role="users" Type="Self.user" Multiplicity="1" />
+          <End Role="violation_records" Type="Self.violation_records" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id_user" />
+            </Principal>
+            <Dependent Role="violation_records">
+              <PropertyRef Name="id_reporter_user" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_records_categories">
+          <End Role="violation_categories" Type="Self.violation_categories" Multiplicity="1" />
+          <End Role="violation_records" Type="Self.violation_records" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="violation_categories">
+              <PropertyRef Name="id_category" />
+            </Principal>
+            <Dependent Role="violation_records">
+              <PropertyRef Name="id_category" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="db_siskom_smeasEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="classes" EntityType="Self.class" />
+          <EntitySet Name="students" EntityType="Self.student" />
+          <EntitySet Name="users" EntityType="Self.user" />
+          <EntitySet Name="violation_categories" EntityType="Self.violation_categories" />
+          <EntitySet Name="violation_records" EntityType="Self.violation_records" />
+          <AssociationSet Name="FK_students_classes" Association="Self.FK_students_classes">
+            <End Role="classes" EntitySet="classes" />
+            <End Role="students" EntitySet="students" />
+          </AssociationSet>
+          <AssociationSet Name="FK_records_students" Association="Self.FK_records_students">
+            <End Role="students" EntitySet="students" />
+            <End Role="violation_records" EntitySet="violation_records" />
+          </AssociationSet>
+          <AssociationSet Name="FK_records_users" Association="Self.FK_records_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="violation_records" EntitySet="violation_records" />
+          </AssociationSet>
+          <AssociationSet Name="FK_records_categories" Association="Self.FK_records_categories">
+            <End Role="violation_categories" EntitySet="violation_categories" />
+            <End Role="violation_records" EntitySet="violation_records" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="db_siskom_smeasModelStoreContainer" CdmEntityContainer="db_siskom_smeasEntities">
+          <EntitySetMapping Name="classes">
+            <EntityTypeMapping TypeName="db_siskom_smeasModel.class">
+              <MappingFragment StoreEntitySet="classes">
+                <ScalarProperty Name="id_class" ColumnName="id_class" />
+                <ScalarProperty Name="class_name" ColumnName="class_name" />
+                <ScalarProperty Name="academic_year" ColumnName="academic_year" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="students">
+            <EntityTypeMapping TypeName="db_siskom_smeasModel.student">
+              <MappingFragment StoreEntitySet="students">
+                <ScalarProperty Name="id_student" ColumnName="id_student" />
+                <ScalarProperty Name="nisn" ColumnName="nisn" />
+                <ScalarProperty Name="full_name" ColumnName="full_name" />
+                <ScalarProperty Name="id_class" ColumnName="id_class" />
+                <ScalarProperty Name="gender" ColumnName="gender" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="users">
+            <EntityTypeMapping TypeName="db_siskom_smeasModel.user">
+              <MappingFragment StoreEntitySet="users">
+                <ScalarProperty Name="id_user" ColumnName="id_user" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="full_name" ColumnName="full_name" />
+                <ScalarProperty Name="role" ColumnName="role" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="violation_categories">
+            <EntityTypeMapping TypeName="db_siskom_smeasModel.violation_categories">
+              <MappingFragment StoreEntitySet="violation_categories">
+                <ScalarProperty Name="id_category" ColumnName="id_category" />
+                <ScalarProperty Name="category_name" ColumnName="category_name" />
+                <ScalarProperty Name="severity_level" ColumnName="severity_level" />
+                <ScalarProperty Name="default_point" ColumnName="default_point" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="violation_records">
+            <EntityTypeMapping TypeName="db_siskom_smeasModel.violation_records">
+              <MappingFragment StoreEntitySet="violation_records">
+                <ScalarProperty Name="id_record" ColumnName="id_record" />
+                <ScalarProperty Name="id_student" ColumnName="id_student" />
+                <ScalarProperty Name="id_category" ColumnName="id_category" />
+                <ScalarProperty Name="id_reporter_user" ColumnName="id_reporter_user" />
+                <ScalarProperty Name="violation_date" ColumnName="violation_date" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="counseling_status" ColumnName="counseling_status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
